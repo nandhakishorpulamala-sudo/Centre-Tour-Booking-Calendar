@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centre Tour Booking Calendar & Conversion Dashboard</title>
+    <!-- CSS Link -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar glass">
+        <div class="brand">
+            <div class="brand-logo">
+                <i data-lucide="calendar"></i>
+            </div>
+            <h1>Centre Tour Booking</h1>
+        </div>
+        
+        <nav>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-target="dashboard">
+                    <a href="#dashboard">
+                        <i data-lucide="layout-dashboard"></i>
+                        <span>Dashboard & Funnel</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-target="calendar">
+                    <a href="#calendar">
+                        <i data-lucide="calendar-days"></i>
+                        <span>Tour Calendar</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-target="teacher">
+                    <a href="#teacher">
+                        <i data-lucide="baby"></i>
+                        <span>Teacher Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item" data-target="messaging">
+                    <a href="#messaging">
+                        <i data-lucide="message-square"></i>
+                        <span>Messaging Hub</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        
+        <div class="nav-footer">
+            <div class="user-avatar">AD</div>
+            <div class="user-info">
+                <h4>Admin Dashboard</h4>
+                <p>Centre Director</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN APP CONTENT AREA -->
+    <main class="main-content">
+        
+        <!-- TOP APP BAR -->
+        <header class="top-header">
+            <div class="header-title">
+                <h2 id="view-title">Dashboard & Funnel</h2>
+                <p id="view-subtitle">Monitor admissions from enquiry to confirmation</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="exportReport()">
+                    <i data-lucide="download"></i>
+                    <span>Export CSV</span>
+                </button>
+                <button class="btn btn-primary" onclick="openEnquiryModal()">
+                    <i data-lucide="plus"></i>
+                    <span>New Enquiry</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- PAGE 1: DASHBOARD & PIPELINE -->
+        <section id="page-dashboard" class="page-view active">
+            <!-- Stats Widgets -->
+            <div class="stats-grid">
+                <div class="stat-card glass cyan">
+                    <div class="stat-info">
+                        <p>Total Enquiries</p>
+                        <h3 id="stat-total">0</h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                </div>
+                <div class="stat-card glass purple">
+                    <div class="stat-info">
+                        <p>Scheduled Tours</p>
+                        <h3 id="stat-tours">0</h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i data-lucide="eye"></i>
+                    </div>
+                </div>
+                <div class="stat-card glass amber">
+                    <div class="stat-info">
+                        <p>Pending Follow-ups</p>
+                        <h3 id="stat-pending">0</h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i data-lucide="clock"></i>
+                    </div>
+                </div>
+                <div class="stat-card glass emerald">
+                    <div class="stat-info">
+                        <p>Confirmed Admissions</p>
+                        <h3 id="stat-confirmed">0</h3>
+                    </div>
+                    <div class="stat-icon">
+                        <i data-lucide="check-circle-2"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kanban Board -->
+            <div class="pipeline-container" id="pipeline-board">
+                <!-- Columns will be injected by JavaScript -->
+            </div>
+        </section>
+
+        <!-- PAGE 2: TOUR CALENDAR -->
+        <section id="page-calendar" class="page-view">
+            <div class="calendar-layout">
+                <div class="calendar-main glass">
+                    <div class="calendar-header">
+                        <div class="calendar-title">
+                            <h3 id="calendar-month-year">June 2026</h3>
+                        </div>
+                        <div class="calendar-nav-buttons">
+                            <button class="btn-icon" onclick="prevMonth()"><i data-lucide="chevron-left"></i></button>
+                            <button class="btn-icon" onclick="nextMonth()"><i data-lucide="chevron-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar-grid" id="calendar-grid-container">
+                        <!-- Calendar headers and days will be injected by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="calendar-sidebar">
+                    <div class="tour-list-box glass">
+                        <h3 class="tour-list-title">Today's Tours</h3>
+                        <div id="calendar-tour-list">
+                            <!-- Tour schedule items injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: TEACHER & DAYCARE ENTRY -->
+        <section id="page-teacher" class="page-view">
+            <div class="teacher-grid">
+                <!-- Log Routine Form -->
+                <div class="teacher-form-panel glass">
+                    <h3 class="form-title">Log Child Activity / Routine</h3>
+                    <form id="activity-form" onsubmit="submitActivityForm(event)">
+                        <div class="form-group">
+                            <label for="act-enquiry-select">Select Child</label>
+                            <select id="act-enquiry-select" class="form-control" required>
+                                <!-- Injected by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="act-type">Activity Type</label>
+                            <select id="act-type" class="form-control" required>
+                                <option value="daycare_routine">Daycare Routine (Meal, Nap, Care)</option>
+                                <option value="classroom_activity">Classroom Activity (Learning, Trial)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="act-logged-by">Teacher / Staff Name</label>
+                            <input type="text" id="act-logged-by" class="form-control" value="Teacher Jenny" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="act-description">Activity Description</label>
+                            <textarea id="act-description" class="form-control" placeholder="e.g. Emily participated enthusiastically in the sandbox trial class..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            <i data-lucide="save"></i>
+                            <span>Save Routine Entry</span>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Activity Logs Timeline -->
+                <div class="teacher-activity-log glass">
+                    <h3 class="form-title">Recent Activity Feed</h3>
+                    <div id="activity-feed-container">
+                        <!-- Feed list injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: MESSAGING HUB & SIMULATION -->
+        <section id="page-messaging" class="page-view">
+            <div class="messaging-layout">
+                <!-- Templates Display Panel -->
+                <div class="messaging-panel glass">
+                    <h3 class="form-title">Admissions Notification Center</h3>
+                    <div class="form-group">
+                        <label for="msg-enquiry-select">Select active lead template</label>
+                        <select id="msg-enquiry-select" class="form-control" onchange="loadMessageTemplates()">
+                            <!-- Injected by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Funnel Status</label>
+                        <div class="status-badge-inline" id="msg-current-status" style="margin-top: 5px;">Enquiry</div>
+                    </div>
+                    
+                    <div class="form-actions" style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px; width: 100%;">
+                        <button class="btn btn-primary" onclick="simulateWhatsAppSend()" style="width: 100%; justify-content: center;">
+                            <i data-lucide="phone-call"></i>
+                            <span>Simulate Send WhatsApp Message</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="simulateEmailSend()" style="width: 100%; justify-content: center; border: 1px solid rgba(255,255,255,0.1)">
+                            <i data-lucide="mail"></i>
+                            <span>Simulate Send Email Notification</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Screen simulator previews -->
+                <div style="display: flex; flex-direction: column; gap: 32px;">
+                    <!-- WhatsApp Simulator -->
+                    <div class="whatsapp-simulator">
+                        <div class="wa-header">
+                            <div class="wa-avatar">P</div>
+                            <div class="wa-contact-info">
+                                <h4 id="wa-phone-name">Parent Contact</h4>
+                                <p>Online</p>
+                            </div>
+                        </div>
+                        <div class="wa-chat-body" id="wa-chat-body-container">
+                            <div class="wa-message wa-outgoing">
+                                <span>Hello! This is Centre Tour Booking system.</span>
+                                <span class="wa-message-time">10:00 AM</span>
+                            </div>
+                        </div>
+                        <div class="wa-footer-bar">
+                            <input type="text" class="wa-input" placeholder="Type a message..." disabled>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Client Simulator -->
+                    <div class="email-client-box">
+                        <div class="email-header">
+                            <div class="email-meta-row">
+                                <label>To:</label>
+                                <span id="email-preview-to">parent@example.com</span>
+                            </div>
+                            <div class="email-meta-row">
+                                <label>Subject:</label>
+                                <span id="email-preview-subject" style="font-weight: 600;">Welcome to Centre Tour</span>
+                            </div>
+                        </div>
+                        <div class="email-body-panel" id="email-preview-body">
+                            <!-- Injected email content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: ADD ENQUIRY -->
+    <div class="modal-overlay" id="enquiry-modal">
+        <div class="modal-box glass">
+            <div class="modal-header">
+                <h3>New Parent Enquiry</h3>
+                <button class="modal-close" onclick="closeEnquiryModal()"><i data-lucide="x"></i></button>
+            </div>
+            <form id="enquiry-form" onsubmit="submitEnquiryForm(event)">
+                <div class="form-group">
+                    <label for="parent-name">Parent/Guardian Name</label>
+                    <input type="text" id="parent-name" class="form-control" required placeholder="e.g. Sarah Connor">
+                </div>
+                <div class="form-group">
+                    <label for="child-name">Child's Name</label>
+                    <input type="text" id="child-name" class="form-control" required placeholder="e.g. John Connor">
+                </div>
+                <div class="form-group">
+                    <label for="child-age">Child's Age (Years)</label>
+                    <input type="number" id="child-age" class="form-control" required min="0" max="18" placeholder="e.g. 4">
+                </div>
+                <div class="form-group">
+                    <label for="contact-phone">Phone Number</label>
+                    <input type="tel" id="contact-phone" class="form-control" required placeholder="e.g. +1 555 123 4567">
+                </div>
+                <div class="form-group">
+                    <label for="contact-email">Email Address</label>
+                    <input type="email" id="contact-email" class="form-control" required placeholder="e.g. sarah@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="enq-source">Enquiry Source</label>
+                    <select id="enq-source" class="form-control">
+                        <option value="Parent Enquiry">Parent Enquiry Form</option>
+                        <option value="Parent Portal">Parent Portal</option>
+                        <option value="Referral">Referral Program</option>
+                        <option value="Counsellor Follow-up">Counsellor Follow-up</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="enq-owner">Assigned Owner</label>
+                    <select id="enq-owner" class="form-control">
+                        <option value="Counsellor Sarah">Counsellor Sarah</option>
+                        <option value="Counsellor Michael">Counsellor Michael</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="enq-notes">Special Enquiries / Notes</label>
+                    <textarea id="enq-notes" class="form-control" placeholder="e.g. Child is highly active, interested in montessori sandbox program."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeEnquiryModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Enquiry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: DETAILED PROFILE INSPECT & AUDIT TIMELINE -->
+    <div class="modal-overlay" id="inspect-modal">
+        <div class="modal-box glass" style="width: 800px; max-width: 95%;">
+            <div class="modal-header">
+                <h3>Lead Enrolment File</h3>
+                <button class="modal-close" onclick="closeInspectModal()"><i data-lucide="x"></i></button>
+            </div>
+            
+            <div class="profile-grid">
+                <!-- Left panel: Info summary -->
+                <div class="profile-card-left glass" style="background: rgba(0,0,0,0.15)">
+                    <div class="profile-avatar-large" id="inspect-avatar">JD</div>
+                    <div class="profile-name" id="inspect-child-name">John Connor</div>
+                    <div class="profile-status-badge">
+                        <div class="status-badge-inline" id="inspect-status" style="background: hsl(var(--secondary))">Tour</div>
+                    </div>
+                    
+                    <div class="profile-detail-item">
+                        <label>Parent Name</label>
+                        <span id="inspect-parent-name">Sarah Connor</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label>Child Age</label>
+                        <span id="inspect-child-age">4 Years</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label>Contact Phone</label>
+                        <span id="inspect-phone">+1 555 123 4567</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label>Contact Email</label>
+                        <span id="inspect-email">sarah@example.com</span>
+                    </div>
+                    <div class="profile-detail-item">
+                        <label>Enquiry Source</label>
+                        <span id="inspect-source">Parent Enquiry</span>
+                    </div>
+                    
+                    <!-- Editable owner -->
+                    <div class="form-group" style="margin-top: 20px;">
+                        <label for="inspect-owner-select">Assignee/Owner</label>
+                        <select id="inspect-owner-select" class="form-control" onchange="updateLeadOwner()">
+                            <option value="Counsellor Sarah">Counsellor Sarah</option>
+                            <option value="Counsellor Michael">Counsellor Michael</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Right panel: Timeline & AI suggestions -->
+                <div class="profile-details-right">
+                    <!-- AI Panel -->
+                    <div class="ai-recommendation-panel">
+                        <div class="ai-icon-pulse">
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                        <div class="ai-recommendation-content">
+                            <h4>AI Insight Recommendation <span class="card-badge" id="inspect-priority-badge">High</span></h4>
+                            <p class="ai-rec-text" id="inspect-ai-rec">Evaluate current schedule and arrange a tour. Child is highly suited for sandbox montessori class.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes Editor -->
+                    <div class="glass" style="padding: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <label style="font-size: 0.85rem; font-weight:600; color:hsl(var(--text-secondary))">Notes & Trial Observations</label>
+                            <button class="btn btn-secondary" style="padding: 4px 10px; font-size:0.75rem;" onclick="saveLeadNotes()">Save Notes</button>
+                        </div>
+                        <textarea id="inspect-notes-input" class="form-control" style="min-height: 70px; background: rgba(0,0,0,0.15)"></textarea>
+                    </div>
+                    
+                    <!-- Action Logs timeline -->
+                    <div class="timeline-panel glass" style="flex-grow: 1; display:flex; flex-direction:column; overflow:hidden;">
+                        <h4 style="font-size: 0.95rem; font-weight: 600; margin-bottom: 12px; padding: 12px 16px 0 16px;">Activity History & Audit Trail</h4>
+                        <div class="timeline-list" id="inspect-timeline-container" style="overflow-y:auto; flex-grow:1; max-height:220px; padding:0 24px 20px 24px; margin-left: 20px;">
+                            <!-- Time node records injected by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: QUICK TOUR SCHEDULER -->
+    <div class="modal-overlay" id="tour-modal">
+        <div class="modal-box glass">
+            <div class="modal-header">
+                <h3>Schedule Centre Tour</h3>
+                <button class="modal-close" onclick="closeTourModal()"><i data-lucide="x"></i></button>
+            </div>
+            <form id="tour-form" onsubmit="submitTourForm(event)">
+                <input type="hidden" id="tour-enquiry-id">
+                <div class="form-group">
+                    <label>Selected Child</label>
+                    <input type="text" id="tour-child-name-display" class="form-control" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="tour-date">Preferred Date</label>
+                    <input type="date" id="tour-date" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="tour-time">Preferred Time</label>
+                    <input type="time" id="tour-time" class="form-control" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeTourModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Book Tour</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast" id="toast-alert">Action saved successfully!</div>
+
+    <!-- Lucide Icons and Application JS -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="app.js"></script>
+</body>
+</html>
